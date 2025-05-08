@@ -76,13 +76,14 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const resetURL = `${req.protocol}://${req.get(
     'host'
   )}/api/v1/users/resetPassword/${resetToken}`;
-  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+  const resetLink = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
 
   try {
     await sendEmailWithToken({
       email: user.email,
       subject: 'Your password reset token (valid for 10 minutes)',
-      message
+      message: `Click the link to reset your password: ${resetLink}`,
+      html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`
     });
     res.status(200).json({
       status: 'success',
