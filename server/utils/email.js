@@ -1,0 +1,25 @@
+const nodemailer = require('nodemailer');
+
+const sendEmailWithToken = async options => {
+  const transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+
+  const mailOptions = {
+    from: `"Sherif HodHod" <${process.env.EMAIL_FROM}>`,
+    to: options.email,
+    subject: options.subject,
+    text: options.message, // fallback
+    html: options.html || undefined // optional HTML version
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+module.exports = { sendEmailWithToken };
