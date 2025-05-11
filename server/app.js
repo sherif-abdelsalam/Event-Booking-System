@@ -6,6 +6,7 @@ const helmet = require("helmet"); // security headers
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
+const cors = require("cors"); // enable CORS
 
 const usersRouter = require("./routers/userRouter");
 const authRouter = require("./routers/authRouter");
@@ -22,6 +23,13 @@ app.use(helmet());
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+); // use CORS middleware
 
 app.use(express.json({ limit: "10kb" }));
 

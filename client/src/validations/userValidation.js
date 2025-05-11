@@ -1,11 +1,15 @@
 import * as yup from "yup";
 const registerSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
+  name: yup
+    .string()
+    .min(3, "Name must be at least 3 characters")
+    .max(50, "Name must be at most 50 characters")
+    .required("Name is required"),
+
   email: yup.string().email("Email is invalid").required("Email is required"),
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters")
-    .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
     .required("Password is required"),
   confirmPassword: yup
     .string()
@@ -17,7 +21,6 @@ const loginSchema = yup.object().shape({
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters")
-    .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
     .required("Password is required"),
   // Add any other fields you want to validate
 });
@@ -28,7 +31,6 @@ const resetPasswordSchema = yup.object().shape({
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters")
-    .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
     .required("Password is required"),
   confirmPassword: yup
     .string()

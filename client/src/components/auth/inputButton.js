@@ -6,11 +6,10 @@ export default function InputButton({
   value,
   onChange,
   onBlur,
-
   error,
 }) {
   return (
-    <div className="mb-8">
+    <div className="mb-10 relative">
       <label className="block text-textGray text-[18px] font-openSans mb-2">
         {title}
       </label>
@@ -20,10 +19,14 @@ export default function InputButton({
         onChange={onChange}
         onBlur={onBlur}
         value={value}
-        className="border border-gray-300 rounded-md p-4 w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+        className={`border border-gray-300 rounded-md p-4 w-full focus:outline-none focus:ring-2 focus:border-transparent ${
+          error ? " border-2 border-red-600" : "focus:ring-primary"
+        } `}
         placeholder={placeholder}
       />
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && (
+        <p className="absolute bottom-[-32px] text-red-600 ">{error}</p>
+      )}
     </div>
   );
 }

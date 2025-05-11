@@ -1,12 +1,14 @@
-import { useState } from "react";
 import InputButton from "../components/auth/inputButton";
 import SplitScreen from "../components/auth/splitScreen";
 import { SIGN_UP } from "../constants/authConstants";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerSchema } from "../validations/userValidation";
 import { useFormik } from "formik";
+import { register } from "../auth/authServices";
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -16,8 +18,23 @@ export default function Register() {
     },
     validationSchema: registerSchema,
 
-    onSubmit: (values) => {
-      // Handle registration logic here
+    onSubmit: async (values) => {
+      const newUser = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+      };
+
+      try {
+        const response = await register(newUser);
+        if (response) {
+          alert("Registration successful");
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Registration error:", error);
+      }
     },
   });
 

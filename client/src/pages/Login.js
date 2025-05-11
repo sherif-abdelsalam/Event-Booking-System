@@ -1,18 +1,37 @@
-import { useState } from "react";
 import SplitScreen from "../components/auth/splitScreen";
 import { SIGN_IN } from "../constants/authConstants";
 import InputButton from "../components/auth/inputButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { loginSchema } from "../validations/userValidation";
+import { login } from "../auth/authServices";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
-  };
+  const navigate = useNavigate();
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: async (values) => {
+      const user = {
+        email: values.email,
+        password: values.password,
+      };
+
+      try {
+        const response = await login(user);
+        if (response) {
+          alert("Login successful");
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+      }
+      // const response = await login(user);
+    },
+  });
 
   return (
     <SplitScreen sign={SIGN_IN}>
@@ -20,19 +39,36 @@ export default function Login() {
         <div className="w-4/5">
           <h1 className="font-bold text-[42px] text-textPrimary mb-8">Login</h1>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={formik.handleSubmit}>
             <InputButton
-              field={email}
+              type="email"
+              value={formik.values.email}
               title="Email"
-              setField={setEmail}
               placeholder="Enter your email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              name="email"
+              error={
+                formik.touched.email && formik.errors.email
+                  ? formik.errors.email
+                  : null
+              }
             />
             <InputButton
-              field={password}
+              type="password"
+              value={formik.values.password}
               title="Password"
-              setField={setPassword}
               placeholder="Enter your password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              name="password"
+              error={
+                formik.touched.password && formik.errors.password
+                  ? formik.errors.password
+                  : null
+              }
             />
+
             <div className="flex flex-row justify-between mb-8">
               <a
                 href="/forgot-password"
