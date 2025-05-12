@@ -7,6 +7,7 @@ const {
   createEvent,
   updateEvent,
   deleteEvent,
+  getCategories,
 } = require("../controllers/eventController");
 
 const { validateRequest } = require("../middleware/validation");
@@ -35,8 +36,9 @@ router
     validateRequest,
     createEvent
   );
-
+router.get("/categories", getCategories); // Get event categories
 router
+
   .route("/:id")
   .get(getEvent)
   .put(protect, restrictTo("admin"), updateEvent)

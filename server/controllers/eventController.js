@@ -142,6 +142,18 @@ exports.getEvent = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getCategories = catchAsync(async (req, res, next) => {
+  const categories = await Event.distinct("category");
+  if (!categories) {
+    return next(new AppErrors("No categories found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: categories,
+  });
+});
+
 // @desc    Create new event
 // @route   POST /api/events
 // @access  Private/Admin
