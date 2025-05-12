@@ -1,11 +1,13 @@
 import { createContext, useContext, useState, useEffect } from "react";
-
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
+
+  console.log("AuthProvider initialized", { token, user });
 
   // New: Fetch user data from backend when token changes
   useEffect(() => {
@@ -43,8 +45,12 @@ export const AuthProvider = ({ children }) => {
     return !!user; // Now based on user object rather than token
   };
 
-  const hasRole = (role) => {
-    return user?.roles?.includes(role);
+  const isAdmin = () => {
+    if (loading) return false; // Avoid checking role while loading
+    if (!user) return false; // No user means not authenticated
+    if (!user.role) return false; // Role not defined
+    console.log("User role:", user.role);
+    return user && user.role === "admin"; // Check user role
   };
 
   return (
@@ -55,7 +61,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         isAuthenticated,
-        hasRole,
+        isAdmin,
         loading,
       }}
     >
@@ -66,7 +72,7 @@ export const AuthProvider = ({ children }) => {
 
 // Helper function to fetch user data
 async function fetchCurrentUser(token) {
-  const response = await fetch("/api/auth/me", {
+  const response = await fetch(`${REACT_APP_API_URL}/users/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

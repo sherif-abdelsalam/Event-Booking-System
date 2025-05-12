@@ -1,6 +1,8 @@
-const BASE_URL = "http://localhost:5000/api/v1";
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 export const login = async (userData) => {
+  console.log("Basesdfdf URL:", BASE_URL);
+
   const response = await fetch(`${BASE_URL}/auth/login`, {
     method: "POST",
     headers: {
@@ -16,7 +18,7 @@ export const login = async (userData) => {
   const data = await response.json();
   return {
     token: data.token,
-    user: data.user, // Backend now returns both token and user data
+    user: data.user,
   };
 };
 

@@ -3,8 +3,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { AuthProvider } from "../src/auth/authContext";
 import RoleRoute from "../src/auth/roleRoute";
+import Home from "./pages/Home";
 
-const Home = () => <div>Home Page</div>;
 const AdminPanel = () => <div>Admin Panel</div>;
 
 export default function App() {
@@ -21,7 +21,7 @@ export default function App() {
           <Route
             path="/admin"
             element={
-              <RoleRoute roles={["admin"]}>
+              <RoleRoute>
                 <AdminPanel />
               </RoleRoute>
             }

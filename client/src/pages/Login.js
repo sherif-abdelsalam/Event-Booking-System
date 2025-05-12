@@ -5,9 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { loginSchema } from "../validations/userValidation";
 import { login } from "../auth/authServices";
+// import { useAuth } from "../auth/authContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  // const { isAuthenticated, isAdmin } = useAuth();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -23,7 +25,8 @@ export default function Login() {
       try {
         const response = await login(user);
         if (response) {
-          alert("Login successful");
+          console.log(response);
+          localStorage.setItem("token", response.token);
           navigate("/");
         }
       } catch (error) {
@@ -33,6 +36,9 @@ export default function Login() {
     },
   });
 
+  // if (isAuthenticated) {
+  //   return navigate("/");
+  // }
   return (
     <SplitScreen sign={SIGN_IN}>
       <div className="w-full h-full flex justify-center items-center px-24">

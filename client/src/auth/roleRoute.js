@@ -2,18 +2,22 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./authContext";
 
-const RoleRoute = ({ children, roles }) => {
-  const { hasRole, isAuthenticated, loading } = useAuth();
-
+const RoleRoute = ({ children }) => {
+  const { isAdmin, isAuthenticated, loading } = useAuth();
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-full w-full flex justify-center items-center text-2xl font-bold text-primary bg-white">
+        Loading...
+      </div>
+    );
   }
 
-  if (!isAuthenticated()) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!hasRole(roles)) {
+  if (!loading && !isAdmin) {
+    console.log("-----------------------------------");
     return <Navigate to="/unauthorized" replace />;
   }
 
