@@ -4,27 +4,27 @@ const mongoose = require("mongoose");
 const app = require("./app");
 const DB = process.env.DATABASE;
 mongoose
-  .connect(DB.replace("<PASSWORD>", process.env.DATABASE_PASSWORD))
-  .then(() => {
-    console.log("DB connection successful!");
-  });
+    .connect(DB.replace("<PASSWORD>", process.env.DATABASE_PASSWORD))
+    .then(() => {
+        console.log("DB connection successful!");
+    });
 
 const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
+    console.log(`App running on port ${port}...`);
 });
 
 process.on("unhandledRejection", (err) => {
-  console.log(err.name, "== " + err.message);
-  console.log("Shutting down the server.......");
+    console.log(err.name, "== " + err.message);
+    console.log("Shutting down the server.......");
 
-  server.close(() => {
-    process.exit();
-  });
+    server.close(() => {
+        process.exit();
+    });
 });
 
 process.on("uncaughtException", (err) => {
-  console.log(err.name, "== " + err.message);
+    console.log(err.name, "== " + err.message);
 });
 
 // 4. API Development

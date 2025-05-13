@@ -2,16 +2,14 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getEvents,
-  getEvent,
-  createEvent,
-  updateEvent,
-  deleteEvent,
-  getCategories,
+    getEvents,
+    getEvent,
+    createEvent,
+    updateEvent,
+    deleteEvent,
 } = require("../controllers/eventController");
 
-const { validateRequest } = require("../middleware/validation");
-const { validateEventCreation } = require("../utils/validators");
+const upload = require("../middleware/upload");
 
 const { getEventBookings } = require("../controllers/bookingController");
 
@@ -19,29 +17,26 @@ const { protect, restrictTo } = require("../middleware/authMiddleware");
 
 // Include bookings router for nested routes
 router.use(
-  "/:eventId/bookings",
-  protect,
-  restrictTo("admin"),
-  getEventBookings
+    "/:eventId/bookings",
+    protect,
+    restrictTo("admin"),
+    getEventBookings
 );
 
 // Event routes
 router
-  .route("/")
-  .get(getEvents)
-  .post(
-    protect,
-    restrictTo("admin"),
-    validateEventCreation,
-    validateRequest,
-    createEvent
-  );
-router.get("/categories", getCategories); // Get event categories
+    .route("/")
+    .get(protect, getEvents)
+    .post(
+        protect,
+        restrictTo("admin"),
+        upload.single("image"),
+        createEvent
+    );
 router
-
-  .route("/:id")
-  .get(getEvent)
-  .put(protect, restrictTo("admin"), updateEvent)
-  .delete(protect, restrictTo("admin"), deleteEvent);
+    .route("/:id")
+    .get(protect, getEvent)
+    .put(protect, restrictTo("admin"), updateEvent)
+    .delete(protect, restrictTo("admin"), deleteEvent);
 
 module.exports = router;
