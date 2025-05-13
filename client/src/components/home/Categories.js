@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "../loader";
 
 export default function Categories() {
@@ -48,10 +48,10 @@ export default function Categories() {
             <p className="font-bold text-xl text-primary">Explore Categories</p>
             <div className="flex flex-wrap justify-center items-center ">
                 {categories.map((category) => (
-                    <div key={category._id} className="flex flex-col items-center justify-center">
+                    <Link to={`/categories/${category._id}`} key={category._id} className="flex flex-col items-center justify-center hover:transform hover:scale-105 transition-transform duration-300">
                         <img src={category.image} alt={category.name} className="w-32 h-32 rounded-full shadow-md  m-4 flex items-center justify-center text-center text-xl font-bold text-primary" />
                         <div className="font-semibold">{category.name}</div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

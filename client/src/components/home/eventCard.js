@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { format } from "date-fns";
-import { Star } from "lucide-react";
 import defaultEventImage from "../../assets/default-event.png";
-
+import { useNavigate } from "react-router-dom";
+const { toast, ToastContainer } = require("react-toastify");
 const getCategoryColor = (category) => {
     const categories = {
         music: "bg-purple-500",
@@ -18,11 +18,13 @@ const getCategoryColor = (category) => {
 
 const EventCard = (event) => {
     const {
+        eventId,
         date,
         category,
         imageUrl,
         name,
         description,
+        isBooked,
         venue,
         price,
     } = event;
@@ -31,12 +33,48 @@ const EventCard = (event) => {
     console.log("Event Date:", date);
     const month = format(eventDate, "MMM").toUpperCase();
     const day = format(eventDate, "d");
-    const timeRange = format(eventDate, "h:mm a");
-
+    const navigate = useNavigate();
+    // 
     const categoryColorClass = getCategoryColor(category);
 
+    const bookEvent = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login", { replace: true });
+            return;
+        }
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/bookings`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ eventId }),
+        });
+
+        if (!response.ok) {
+            const res = await response.json();
+            console.error("Error booking event:", res.message);
+            return;
+        }
+
+        // refresh the page after booking
+        window.location.reload();
+        // Handle successful booking here, e.g., show a success message or update the UI
+        toast.success("Event booked successfully!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
+    };
     return (
-        <div className="w-full max-w-md overflow-hidden rounded-lg border border-purple-300 shadow-md bg-white">
+        <div  //to={`/events/${eventId}`}
+
+            className="w-full max-w-md overflow-hidden rounded-lg border shadow-md bg-white flex flex-col hover:transform hover:scale-105 transition-transform duration-300">
+
             <div className="relative">
                 <img
                     src={imageUrl || defaultEventImage}
@@ -60,14 +98,18 @@ const EventCard = (event) => {
                 </div>
 
                 {/* Event details */}
-                <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-800 mb-1">{name}</h2>
+
+                <div >
+                    <h2 className="text-lg font-bold text-gray-800 mb-1">{name}</h2>
                     <p className="text-gray-600 text-sm mb-2">
                         {description.length > 60
                             ? `${description.substring(0, 60)}...`
                             : description}
                     </p>
-                    <div className="text-gray-700 text-sm mb-1">{timeRange}</div>
+
+
+                    {/* Uncomment if you want to show time and venue */}
+                    {/* <div className="text-gray-700 text-sm mb-1">{timeRange}</div>
                     <div className="text-gray-700 text-sm mb-2">{venue}</div>
 
                     <div className="flex justify-between items-center">
@@ -77,9 +119,31 @@ const EventCard = (event) => {
                             </span>
                         </div>
 
-                    </div>
+                    </div> */}
                 </div>
             </div>
+
+            <div className="mt-auto">
+                {isBooked ? (
+                    <div className="bg-red-600 text-white font-semibold text-center text-md p-3">Booked</div>
+                ) : (
+                    <div
+                        onClick={(e) => { bookEvent(); }} // Prevents the click from bubbling up to the Link
+                        className="bg-green-600 text-white font-semibold text-center text-md p-3 hover:bg-green-900 cursor-pointer">Book Now</div>
+                )}
+            </div>
+
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

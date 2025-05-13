@@ -5,6 +5,8 @@ import RoleRoute from "./auth/roleRoute";
 import Home from "./pages/Home";
 import { AuthProvider } from "./auth/authContext";
 import ProtectedRoute from "./auth/protectRoute";
+import CategoryEvents from "./pages/CategoryEvents";
+import EventDetails from "./pages/EventDetails";
 
 const AdminPanel = () => <div>Admin Panel</div>;
 
@@ -22,6 +24,8 @@ export default function App() {
                     {/* Protected Routes */}
                     <Route element={<ProtectedRoute />}>
                         <Route path="/home" element={<Home />} />
+                        <Route path="/categories/:categoryId" element={<CategoryEvents />} />
+                        <Route path="/events/:eventId" element={<EventDetails />} />
                         <Route
                             path="/admin"
                             element={

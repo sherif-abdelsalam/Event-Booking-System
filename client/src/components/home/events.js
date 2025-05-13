@@ -51,6 +51,7 @@ export default function GetEvents() {
                     events.map((event) => (
                         <EventCard
                             key={event._id}
+                            eventId={event._id}
                             name={event.name}
                             date={event.date}
                             category={event.category.name}
@@ -58,6 +59,7 @@ export default function GetEvents() {
                             description={event.description}
                             venue={event.venue}
                             price={event.price}
+                            isBooked={event.isBooked}
                         />
                     ))}
             </div>
