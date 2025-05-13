@@ -5,6 +5,9 @@ const AppErrors = require("../utils/appErrors");
 const catchAsync = require("../utils/catchAsync");
 const APIFeatures = require("../utils/apiFeatures");
 const cloudinary = require("../utils/cloudinary");
+const checkEventBooking = require("../utils/checkEventBooking");
+
+
 // @desc    Get all events
 // @route   GET /api/events
 // @access  Public
@@ -19,24 +22,8 @@ exports.getEvents = catchAsync(async (req, res, next) => {
 
     let events = await features.query;
 
-
-
     if (req.user) {
-        const userBookings = await Booking.find({
-            userId: req.user.id,
-            status: "confirmed",
-        });
-
-        const bookedEventIds = userBookings.map((booking) =>
-            booking.eventId.toString()
-        );
-
-        events = events.map((event) => {
-            const eventObj = event.toObject();
-            eventObj.isBooked = bookedEventIds.includes(event._id.toString());
-            return eventObj;
-        });
-        events = events.filter((event) => event.category !== null);
+        events = await checkEventBooking(events, req.user._id);
     }
 
     res.status(200).json({

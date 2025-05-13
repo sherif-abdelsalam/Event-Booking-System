@@ -2,6 +2,8 @@ const Category = require("../models/categoryModel");
 const AppErrors = require("../utils/appErrors");
 const catchAsync = require("../utils/catchAsync");
 const cloudinary = require("../utils/cloudinary");
+const Event = require("../models/eventModel");
+const checkEventBooking = require("../utils/checkEventBooking");
 
 exports.getAllCategories = catchAsync(async (req, res, next) => {
     const categories = await Category.find({ isActive: true, name: { $ne: 'other' } });
@@ -56,4 +58,20 @@ exports.createCategory = catchAsync(async (req, res, next) => {
     // stream the file buffer to Cloudinary
     result.end(req.file.buffer);
 
+});
+
+
+exports.getCategoryEvents = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+    let categoryEvents = await Event.find({ category: id }).populate("category", "name -_id");
+    if (req.user) {
+        categoryEvents = await checkEventBooking(categoryEvents, req.user._id);
+    }
+    if (!categoryEvents) {
+        return next(new AppErrors("No events found for this category", 404));
+    }
+    res.status(200).json({
+        success: true,
+        data: categoryEvents,
+    });
 });

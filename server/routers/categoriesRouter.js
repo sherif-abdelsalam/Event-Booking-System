@@ -1,6 +1,6 @@
 
 const { Router } = require('express');
-const { getAllCategories, createCategory } = require('../controllers/categoryController');
+const { getAllCategories, createCategory, getCategoryEvents } = require('../controllers/categoryController');
 const { protect, restrictTo } = require("../middleware/authMiddleware");
 const upload = require('../middleware/upload');
 
@@ -15,6 +15,9 @@ router
         upload.single('image'),
         createCategory
     );
+
+router.route('/:id/events')
+    .get(protect, getCategoryEvents); // Assuming you want to get a specific category by ID
 
 
 module.exports = router;
