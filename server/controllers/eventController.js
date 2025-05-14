@@ -33,6 +33,8 @@ exports.getEvents = catchAsync(async (req, res, next) => {
     });
 });
 
+
+
 // @desc    Get single event
 // @route   GET /api/events/:id
 // @access  Public
