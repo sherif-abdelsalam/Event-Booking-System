@@ -76,8 +76,8 @@ exports.getBooking = catchAsync(async (req, res, next) => {
 
 exports.createBooking = catchAsync(async (req, res, next) => {
     // Add user ID to request body
-    req.body.userId = req.user.id;
-
+    const userId = req.user.id;
+    const eventId = req.body.eventId;
     // Check if event exists
     const event = await Event.findById(req.body.eventId);
 
@@ -86,7 +86,6 @@ exports.createBooking = catchAsync(async (req, res, next) => {
             new AppErrors(`Event not found with id of ${req.body.eventId}`, 404)
         );
     }
-
     // Check if event has already ended
     if (new Date() > event.date) {
         return next(
@@ -103,20 +102,32 @@ exports.createBooking = catchAsync(async (req, res, next) => {
     const existingBooking = await Booking.findOne({
         eventId: req.body.eventId,
         userId: req.user.id,
-        status: 'confirmed'
     });
 
-    if (existingBooking) {
+    if (existingBooking && existingBooking.status === 'confirmed') {
         return next(new AppErrors(`You have already booked this event`, 400));
     }
-
-    // Create booking
-    const booking = await Booking.create(req.body);
-
-    res.status(201).json({
-        success: true,
-        data: booking
-    });
+    if (!existingBooking) {
+        const booking = await Booking.create({
+            userId,
+            eventId
+        });
+        res.status(201).json({
+            success: true,
+            data: booking
+        });
+    } else if (existingBooking && existingBooking.status === 'cancelled') {
+        existingBooking.status = 'confirmed';
+        existingBooking.date = new Date();
+        await existingBooking.save();
+        res.status(201).json({
+            success: true,
+            data: existingBooking
+        });
+    }
+    else {
+        return next(new AppErrors(`You have already booked this event`, 400));
+    }
 });
 
 // @desc    Cancel a booking
@@ -142,7 +153,6 @@ exports.cancelBooking = catchAsync(async (req, res, next) => {
         );
     }
 
-    // Update booking status to cancelled
     booking.status = 'cancelled';
     await booking.save();
 
