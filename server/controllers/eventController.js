@@ -37,29 +37,35 @@ exports.getEvents = catchAsync(async (req, res, next) => {
 // @route   GET /api/events/:id
 // @access  Public
 exports.getEvent = catchAsync(async (req, res, next) => {
-    const event = await Event.findById(req.params.id);
+    const event = await Event.findById(req.params.id).populate('category', 'name -_id');
+
     if (!event) {
         return next(
             new AppErrors(`Event not found with id of ${req.params.id}`, 404)
         );
     }
+    if (!req.user) {
+        return next(
+            new AppErrors(`User not found with id of ${req.params.id}`, 404)
+        );
+    }
 
     // Check if user has booked this event
     let isBooked = false;
+    const booking = await Booking.findOne({
+        eventId: event._id,
+        userId: req.user.id,
+        status: "confirmed",
+    });
 
-    if (req.user) {
-        const booking = await Booking.findOne({
-            eventId: event._id,
-            userId: req.user.id,
-            status: "confirmed",
-        });
-
-        isBooked = !!booking;
-    }
+    isBooked = !!booking;
 
     // Convert to object so we can add the isBooked property
     const eventObj = event.toObject();
     eventObj.isBooked = isBooked;
+    if (isBooked) {
+        eventObj.bookingId = booking._id;
+    }
 
     res.status(200).json({
         success: true,
@@ -90,14 +96,14 @@ exports.createEvent = catchAsync(async (req, res, next) => {
             imageUrl = result.secure_url;
 
             const event = await Event.create({
-                name: req.body.name,
-                description: req.body.description,
-                category: req.body.category,
-                date: req.body.date,
-                venue: req.body.venue,
-                price: req.body.price,
-                createdBy: req.body.createdBy,
-                capacity: req.body.capacity,
+                name,
+                description,
+                category,
+                date,
+                venue,
+                price,
+                createdBy,
+                capacity,
                 imageUrl,
             });
 

@@ -53,3 +53,17 @@ exports.restrictTo = (...roles) => {
         next();
     };
 };
+
+exports.isAdmin = catchAsync(async (req, res, next) => {
+    if (req.user.role === 'admin') {
+        return res.status(200).json({
+            status: 'success',
+            isAdmin: true,
+        });
+    } else {
+        return res.status(200).json({
+            status: 'success',
+            isAdmin: false,
+        });
+    }
+});

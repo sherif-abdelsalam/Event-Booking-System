@@ -42,7 +42,6 @@ process.on("uncaughtException", (err) => {
 // DELETE /api/events/ - Delete an event (admin only)
 
 // Booking Endpoints
-
 // GET /api/bookings - Get current user's bookings
 // GET /api/bookings/ - Get a specific booking
 // POST /api/bookings - Create a new booking

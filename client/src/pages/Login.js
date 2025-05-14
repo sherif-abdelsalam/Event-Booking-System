@@ -51,7 +51,7 @@ export default function Login() {
         <SplitScreen sign={SIGN_IN}>
             <div className="w-full h-full flex justify-center items-center px-24">
                 <div className="w-4/5">
-                    <h1 className="font-bold text-[42px] text-textPrimary mb-8">Login</h1>
+                    <h1 className="font-bold text-[32px] text-textPrimary mb-8">Login</h1>
 
                     <form onSubmit={formik.handleSubmit}>
                         <InputButton
@@ -99,7 +99,7 @@ export default function Login() {
 
                         <button
                             type="submit"
-                            className="bg-primary text-white font-bold p-4 rounded-md w-full text-[20px] hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 mb-7"
+                            className="bg-primary text-white font-bold p-3 rounded-md w-full text-[18px] hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 mb-2"
                         >
                             {formik.isSubmitting ? (
                                 <div className="flex items-center justify-center">

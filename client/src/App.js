@@ -7,8 +7,7 @@ import { AuthProvider } from "./auth/authContext";
 import ProtectedRoute from "./auth/protectRoute";
 import CategoryEvents from "./pages/CategoryEvents";
 import EventDetails from "./pages/EventDetails";
-
-const AdminPanel = () => <div>Admin Panel</div>;
+import AdminPanel from "./pages/Admin/adminPanel";
 
 export default function App() {
     return (
@@ -26,17 +25,11 @@ export default function App() {
                         <Route path="/home" element={<Home />} />
                         <Route path="/categories/:categoryId" element={<CategoryEvents />} />
                         <Route path="/events/:eventId" element={<EventDetails />} />
-                        <Route
-                            path="/admin"
-                            element={
-                                <RoleRoute>
-                                    <AdminPanel />
-                                </RoleRoute>
-                            }
-                        />
-                    </Route>
 
-                    {/* Fallback route */}
+                        <Route element={<RoleRoute />} >
+                            <Route path="/admin" element={<AdminPanel />} />
+                        </Route>
+                    </Route>
                     <Route path="*" element={<div>404 Not Found</div>} />
                 </Routes>
             </AuthProvider>

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
 import { format } from "date-fns";
 import defaultEventImage from "../../assets/default-event.png";
 import { useNavigate } from "react-router-dom";
+import { checkIsBooked } from "../../utils/checkIsBooked";
 const { toast, ToastContainer } = require("react-toastify");
 const getCategoryColor = (category) => {
     const categories = {
@@ -25,8 +25,6 @@ const EventCard = (event) => {
         name,
         description,
         isBooked,
-        venue,
-        price,
     } = event;
 
     const eventDate = new Date(date);
@@ -43,24 +41,12 @@ const EventCard = (event) => {
             navigate("/login", { replace: true });
             return;
         }
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/bookings`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({ eventId }),
-        });
+        const response = await checkIsBooked(token, eventId);
 
         if (!response.ok) {
-            const res = await response.json();
-            console.error("Error booking event:", res.message);
+            console.error("Error booking event:", response.message);
             return;
         }
-
-        // refresh the page after booking
-        window.location.reload();
-        // Handle successful booking here, e.g., show a success message or update the UI
         toast.success("Event booked successfully!", {
             position: "top-right",
             autoClose: 3000,
@@ -69,10 +55,11 @@ const EventCard = (event) => {
             pauseOnHover: true,
             draggable: true,
         });
+        window.location.reload();
+
     };
     return (
-        <div  //to={`/events/${eventId}`}
-
+        <div onClick={() => navigate(`/events/${eventId}`)}
             className="w-full max-w-md overflow-hidden rounded-lg border shadow-md bg-white flex flex-col hover:transform hover:scale-105 transition-transform duration-300">
 
             <div className="relative">

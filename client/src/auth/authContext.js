@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [loading, setLoading] = useState(true);
 
-    console.log("AuthProvider initialized", { token, user });
+
 
     // New: Fetch user data from backend when token changes
     useEffect(() => {
@@ -18,10 +18,10 @@ export const AuthProvider = ({ children }) => {
             if (token) {
                 try {
                     const userData = await fetchCurrentUser(token);
-                    setUser(userData);
+                    setUser(userData.data.user);
+                    console.log("User data fetched:", userData.data.user);
                     localStorage.setItem("token", token);
-                    localStorage.setItem("user", JSON.stringify(userData));
-                    navigate("/home", { replace: true });
+                    localStorage.setItem("user", JSON.stringify(userData.data.user));
                 } catch (error) {
                     console.error("Failed to fetch user", error);
                     logout();
@@ -46,14 +46,14 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
-    const isAuthenticated = () => {
-        return !!user; // Now based on user object rather than token
-    };
+    const isAuthenticated = () => !!user;
 
     const isAdmin = () => {
-        if (!user) return false; // If user is null, not authenticated
-        return user && user.role === "admin"; // Check user role
-    };
+        if (user && user.role) {
+            return user.role === "admin";
+        }
+        return false;
+    }
 
     return (
         <AuthContext.Provider

@@ -1,24 +1,53 @@
-import React, { useEffect } from "react";
 import Logo from "../logo";
-import { NavLink } from "react-router-dom";
-import { useAuth } from "../../auth/authContext";
+import { Link, NavLink } from "react-router-dom";
 import Loader from "../loader";
+import { useAuth } from "../../auth/authContext";
 
 const Navbar = () => {
-
     const activeLinkClass =
         "font-semibold text-[20px] text-secondary transition-colors underline underline-offset-[24px] decoration-4 decoration-secondary";
     const inactiveLinkClass =
         "text-white hover:text-secondary transition-colors text-[20px]";
 
     const { isAuthenticated, isAdmin, loading } = useAuth();
-    useEffect(() => {
 
-    }, [isAdmin, isAuthenticated]);
+    // useEffect(() => {
+    //     const isAdmin = async () => {
+    //         const token = localStorage.getItem("token");
+    //         if (!token) {
+    //             console.log("No token found");
+    //             navigate("/login", { replace: true });
+    //             return;
+    //         }
+    //         setLoading(true);
+    //         const response = await fetch(
+    //             `${process.env.REACT_APP_API_URL}/auth/isAdmin`,
+    //             {
+    //                 method: "GET",
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`,
+    //                 },
+    //             }
+    //         );
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             setIsAdmin(data.isAdmin);
+    //         } else {
+    //             console.error("Failed to check admin status");
+    //         }
+    //     }
 
+    //     try {
+    //         isAdmin();
+    //     } catch (error) {
+    //         console.error("Error checking admin status:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }, [navigate]);
 
     if (loading) {
-        return <Loader />;
+        return <Loader />
     }
     return (
         <nav
@@ -60,32 +89,15 @@ const Navbar = () => {
                     Contact
                 </NavLink>
             </div>
-
-            {/* <div className="flex items-center gap-8">
-                {isAuthenticated() && isAdmin() && (
-                    <NavLink
-                        to="/admin"
-                        className={({ isActive }) =>
-                            isActive ? activeLinkClass : inactiveLinkClass
-                        }
+            {isAuthenticated() && isAdmin() && (
+                <Link to="/admin">
+                    <button
+                        className="bg-secondary text-primary font-semibold px-4 py-2 rounded-md hover:bg-accent transition-colors"
                     >
-                        Admin Dashboard
-                    </NavLink>
-                )}
-                {!isAuthenticated() && (
-                    <>
-                        <Link to="/login" className={inactiveLinkClass}>
-                            Sign In
-                        </Link>
-                        <Link
-                            to="/register"
-                            className="bg-secondary px-8 py-2 font-semibold text-primary rounded-md hover:bg-secondaryHover transition-colors"
-                        >
-                            Sign Up
-                        </Link>
-                    </>
-                )}
-            </div> */}
+                        Admin
+                    </button>
+                </Link>
+            )}
         </nav>
     );
 };
