@@ -65,14 +65,6 @@ const Navbar = () => {
                     Home
                 </NavLink>
                 <NavLink
-                    to="/about"
-                    className={({ isActive }) =>
-                        isActive ? activeLinkClass : inactiveLinkClass
-                    }
-                >
-                    About
-                </NavLink>
-                <NavLink
                     to="/events"
                     className={({ isActive }) =>
                         isActive ? activeLinkClass : inactiveLinkClass
@@ -80,14 +72,7 @@ const Navbar = () => {
                 >
                     Events
                 </NavLink>
-                <NavLink
-                    to="/contact"
-                    className={({ isActive }) =>
-                        isActive ? activeLinkClass : inactiveLinkClass
-                    }
-                >
-                    Contact
-                </NavLink>
+
             </div>
             {isAuthenticated() && isAdmin() && (
                 <Link to="/admin">

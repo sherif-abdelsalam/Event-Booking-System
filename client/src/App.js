@@ -8,6 +8,9 @@ import ProtectedRoute from "./auth/protectRoute";
 import CategoryEvents from "./pages/CategoryEvents";
 import EventDetails from "./pages/EventDetails";
 import AdminPanel from "./pages/Admin/adminPanel";
+import BookingConfirmation from "./pages/bookingConfirmation";
+import AllEvents from "./pages/allEvents";
+import NotFound from "./pages/notFound";
 
 export default function App() {
     return (
@@ -24,13 +27,15 @@ export default function App() {
                     <Route element={<ProtectedRoute />}>
                         <Route path="/home" element={<Home />} />
                         <Route path="/categories/:categoryId" element={<CategoryEvents />} />
+                        <Route path="/events" element={<AllEvents />} />
                         <Route path="/events/:eventId" element={<EventDetails />} />
+                        <Route path="/booking-confirmation/:eventId" element={<BookingConfirmation />} />
 
                         <Route element={<RoleRoute />} >
                             <Route path="/admin" element={<AdminPanel />} />
                         </Route>
                     </Route>
-                    <Route path="*" element={<div>404 Not Found</div>} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </AuthProvider>
         </Router>

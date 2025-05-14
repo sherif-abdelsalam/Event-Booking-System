@@ -55,48 +55,49 @@ const EventCard = (event) => {
             pauseOnHover: true,
             draggable: true,
         });
-        window.location.reload();
+        navigate(`/booking-confirmation/${eventId}`);
 
     };
     return (
-        <div onClick={() => navigate(`/events/${eventId}`)}
+        <div
             className="w-full max-w-md overflow-hidden rounded-lg border shadow-md bg-white flex flex-col hover:transform hover:scale-105 transition-transform duration-300">
+            <div onClick={() => navigate(`/events/${eventId}`)}>
 
-            <div className="relative">
-                <img
-                    src={imageUrl || defaultEventImage}
-                    alt={name}
-                    className="w-full h-48 object-cover"
-                />
+                <div className="relative">
+                    <img
+                        src={imageUrl || defaultEventImage}
+                        alt={name}
+                        className="w-full h-48 object-cover"
+                    />
 
-                {/* Category tag */}
-                <div className="absolute bottom-0 left-0 text-sm font-medium text-white">
-                    <div className={`px-3 py-1 rounded-tr-md ${categoryColorClass}`}>
-                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                    {/* Category tag */}
+                    <div className="absolute bottom-0 left-0 text-sm font-medium text-white">
+                        <div className={`px-3 py-1 rounded-tr-md ${categoryColorClass}`}>
+                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="p-4 flex">
-                {/* Date indicator */}
-                <div className="flex flex-col items-center justify-center mr-4 w-16">
-                    <div className="text-purple-700 font-bold text-lg">{month}</div>
-                    <div className="text-gray-800 font-bold text-2xl">{day}</div>
-                </div>
+                <div className="p-4 flex">
+                    {/* Date indicator */}
+                    <div className="flex flex-col items-center justify-center mr-4 w-16">
+                        <div className="text-purple-700 font-bold text-lg">{month}</div>
+                        <div className="text-gray-800 font-bold text-2xl">{day}</div>
+                    </div>
 
-                {/* Event details */}
+                    {/* Event details */}
 
-                <div >
-                    <h2 className="text-lg font-bold text-gray-800 mb-1">{name}</h2>
-                    <p className="text-gray-600 text-sm mb-2">
-                        {description.length > 60
-                            ? `${description.substring(0, 60)}...`
-                            : description}
-                    </p>
+                    <div >
+                        <h2 className="text-lg font-bold text-gray-800 mb-1">{name}</h2>
+                        <p className="text-gray-600 text-sm mb-2">
+                            {description.length > 60
+                                ? `${description.substring(0, 60)}...`
+                                : description}
+                        </p>
 
 
-                    {/* Uncomment if you want to show time and venue */}
-                    {/* <div className="text-gray-700 text-sm mb-1">{timeRange}</div>
+                        {/* Uncomment if you want to show time and venue */}
+                        {/* <div className="text-gray-700 text-sm mb-1">{timeRange}</div>
                     <div className="text-gray-700 text-sm mb-2">{venue}</div>
 
                     <div className="flex justify-between items-center">
@@ -107,7 +108,9 @@ const EventCard = (event) => {
                         </div>
 
                     </div> */}
+                    </div>
                 </div>
+
             </div>
 
             <div className="mt-auto">

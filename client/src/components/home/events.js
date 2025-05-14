@@ -44,7 +44,7 @@ export default function GetEvents() {
 
     return (
         <div className="flex flex-col mx-40 gap-8 mb-24">
-            <p className="font-bold text-xl text-primary">Discover Best of Events</p>
+            <p className="font-bold text-xl text-primary">Discover Events</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                 {!events && events.length === 0 ? <div className="font-semibold">No events available.</div> :

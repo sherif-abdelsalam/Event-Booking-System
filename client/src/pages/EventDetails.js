@@ -31,7 +31,6 @@ export default function EventDetails() {
                 throw new Error("Network response was not ok");
             }
             const data = await response.json();
-            console.log("Fetched event details:", data.data);
             setEventDetails(data.data);
 
         } catch (error) {
@@ -60,23 +59,10 @@ export default function EventDetails() {
             console.error("Error booking event:", res.message);
             return;
         }
-
-        // refresh the page after booking
-        window.location.reload();
-        // Handle successful booking here, e.g., show a success message or update the UI
-        toast.success("Event booked successfully!", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-        });
+        navigate(`/booking-confirmation/${eventId}`);
     };
 
     const handleCancelBooking = async () => {
-
-
         const token = localStorage.getItem("token");
         if (!token) {
             navigate("/login", { replace: true });
