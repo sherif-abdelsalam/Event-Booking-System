@@ -2,6 +2,7 @@ import Logo from "../logo";
 import { Link, NavLink } from "react-router-dom";
 import Loader from "../loader";
 import { useAuth } from "../../auth/authContext";
+import NavbarBackground from "../navabarBackground";
 
 const Navbar = () => {
     const activeLinkClass =
@@ -11,50 +12,11 @@ const Navbar = () => {
 
     const { isAuthenticated, isAdmin, loading } = useAuth();
 
-    // useEffect(() => {
-    //     const isAdmin = async () => {
-    //         const token = localStorage.getItem("token");
-    //         if (!token) {
-    //             console.log("No token found");
-    //             navigate("/login", { replace: true });
-    //             return;
-    //         }
-    //         setLoading(true);
-    //         const response = await fetch(
-    //             `${process.env.REACT_APP_API_URL}/auth/isAdmin`,
-    //             {
-    //                 method: "GET",
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`,
-    //                 },
-    //             }
-    //         );
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             setIsAdmin(data.isAdmin);
-    //         } else {
-    //             console.error("Failed to check admin status");
-    //         }
-    //     }
-
-    //     try {
-    //         isAdmin();
-    //     } catch (error) {
-    //         console.error("Error checking admin status:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }, [navigate]);
-
     if (loading) {
         return <Loader />
     }
     return (
-        <nav
-            className="flex justify-between items-center px-64 py-3 bg-primary 
-    shadow-sm"
-        >
-            <Logo logoSize={"200px"} />
+        <NavbarBackground>
             <div className="flex items-center gap-8">
                 <NavLink
                     to="/home"
@@ -83,7 +45,7 @@ const Navbar = () => {
                     </button>
                 </Link>
             )}
-        </nav>
+        </NavbarBackground>
     );
 };
 

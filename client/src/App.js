@@ -11,6 +11,7 @@ import AdminPanel from "./pages/Admin/adminPanel";
 import BookingConfirmation from "./pages/bookingConfirmation";
 import AllEvents from "./pages/allEvents";
 import NotFound from "./pages/notFound";
+import CreateEvents from "./pages/Admin/createEvents";
 
 export default function App() {
     return (
@@ -32,7 +33,10 @@ export default function App() {
                         <Route path="/booking-confirmation/:eventId" element={<BookingConfirmation />} />
 
                         <Route element={<RoleRoute />} >
-                            <Route path="/admin" element={<AdminPanel />} />
+                            <Route index path="/admin" element={<AdminPanel />} />
+                            <Route path="/admin/events" element={<AdminPanel />} />
+                            <Route path="/admin/events/create-event" element={<CreateEvents />} />
+
                         </Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />
