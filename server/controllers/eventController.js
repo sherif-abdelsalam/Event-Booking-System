@@ -25,10 +25,13 @@ exports.getEvents = catchAsync(async (req, res, next) => {
     if (req.user) {
         events = await checkEventBooking(events, req.user._id);
     }
+    // Pagination result
+    const totalEvents = await Event.countDocuments();
 
     res.status(200).json({
         success: true,
         count: events.length,
+        totalEvents,
         data: events,
     });
 });
