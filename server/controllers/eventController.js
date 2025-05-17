@@ -42,7 +42,7 @@ exports.getEvents = catchAsync(async (req, res, next) => {
 // @route   GET /api/events/:id
 // @access  Public
 exports.getEvent = catchAsync(async (req, res, next) => {
-    const event = await Event.findById(req.params.id).populate('category', 'name -_id');
+    const event = await Event.findById(req.params.id).populate('category', 'name _id');
 
     if (!event) {
         return next(
@@ -84,8 +84,11 @@ exports.getEvent = catchAsync(async (req, res, next) => {
 // @route   POST /api/events
 // @access  Private/Admin
 exports.createEvent = catchAsync(async (req, res, next) => {
+
     const { file } = req;
-    const { name, description, category, date, venue, price, createdBy, capacity } = req.body;
+    const { name, description, category, date, venue, price, capacity } = req.body;
+    const createdBy = req.user.id;
+
     if (!file) {
         return next(new AppErrors("Please upload an image", 400));
     }
@@ -124,6 +127,7 @@ exports.createEvent = catchAsync(async (req, res, next) => {
 // @route   PUT /api/events/:id
 // @access  Private/Admin
 exports.updateEvent = catchAsync(async (req, res, next) => {
+    let imageUrl = "";
     let event = await Event.findById(req.params.id);
 
     if (!event) {
@@ -132,14 +136,21 @@ exports.updateEvent = catchAsync(async (req, res, next) => {
         );
     }
 
-    // Make sure user is event creator or admin
-    if (event.createdBy.toString() !== req.user.id && req.user.role !== "admin") {
-        return next(
-            new AppErrors(
-                `User ${req.user.id} is not authorized to update this event`,
-                403
-            )
-        );
+    if (req.file) {
+        imageUrl = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { resource_type: "image", folder: "events" },
+                (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result.secure_url);
+                }
+            );
+            stream.end(req.file.buffer);
+        });
+    }
+
+    if (imageUrl) {
+        req.body.imageUrl = imageUrl;
     }
 
     event = await Event.findByIdAndUpdate(req.params.id, req.body, {
@@ -152,6 +163,7 @@ exports.updateEvent = catchAsync(async (req, res, next) => {
         data: event,
     });
 });
+
 
 // @desc    Delete event
 // @route   DELETE /api/events/:id

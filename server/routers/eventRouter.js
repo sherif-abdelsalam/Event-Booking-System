@@ -36,7 +36,7 @@ router
 router
     .route("/:id")
     .get(protect, getEvent)
-    .put(protect, restrictTo("admin"), updateEvent)
+    .put(protect, restrictTo("admin"), upload.single("image"), updateEvent)
     .delete(protect, restrictTo("admin"), deleteEvent);
 
 module.exports = router;

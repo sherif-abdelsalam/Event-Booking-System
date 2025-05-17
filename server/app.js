@@ -25,12 +25,12 @@ if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }
 
-app.use(
-    cors({
-        origin: "*",
-        methods: ["GET", "POST", "PUT", "DELETE"],
-    })
-); // use CORS middleware
+// app.use(
+//     cors({
+//         origin: "*",
+//         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+//     })
+// ); // use CORS middleware
 
 app.use(express.json({ limit: "10kb" }));
 
@@ -41,27 +41,18 @@ app.use(mongoSanitize());
 app.use(xss());
 
 app.use(
-    hpp({
-        whitelist: [
-            "duration",
-            "ratingsQuantity",
-            "ratingsAverage",
-            "maxGroupSize",
-            "difficulty",
-            "price",
-        ],
-    })
+    hpp()
 );
 
-// app.use(
-//     rateLimit({
-//         windowMs: 15 * 60 * 1000, // 15 minutes
-//         limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-//         standardHeaders: "draft-8", // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
-//         legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-//         message: "Too many requests from this IP, please try again in an hour!",
-//     })
-// );
+app.use(
+    rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+        standardHeaders: "draft-8", // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+        legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+        message: "Too many requests from this IP, please try again in an hour!",
+    })
+);
 
 app.use(express.static(`${__dirname}/public`));
 
