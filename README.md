@@ -1,6 +1,6 @@
 ## EventBooking
 
-    EventBooking is a full-stack web application for discovering, booking, and managing events. It features a robust backend built with Node.js, Express, and MongoDB, and a modern frontend built with React and Tailwind CSS.
+EventBooking is a full-stack web application for discovering, booking, and managing events. It features a robust backend built with Node.js, Express, and MongoDB, and a modern frontend built with React and Tailwind CSS.
 
 ### Project Demo
 
