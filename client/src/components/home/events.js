@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../loader";
 import Pagination from "../admin/pagination";
 import SearchAndAddEventBar from "../admin/searchAndAddEvent";
+
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
 export default function GetEvents({ isViewAll = false }) {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ export default function GetEvents({ isViewAll = false }) {
             }
 
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/events?page=${page}&limit=${eventsPerPage}`,
+                `${BASE_URL}/events?page=${page}&limit=${eventsPerPage}`,
                 {
                     method: "GET",
                     headers: {

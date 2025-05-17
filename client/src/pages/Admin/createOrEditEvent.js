@@ -7,7 +7,7 @@ import AddEventHeader from "../../components/admin/addEventHeader";
 import EventCreationInput from "../../components/admin/eventCreationInput";
 import { ArrowLeftCircle } from "lucide-react";
 
-const baseUrl = process.env.REACT_APP_API_URL;
+const baseUrl = process.env.REACT_APP_API_URL + "/api/v1";
 const CreateOrEditEvent = ({ event, isEdit = false }) => {
 
     const navigate = useNavigate();

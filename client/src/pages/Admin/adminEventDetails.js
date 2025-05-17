@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ShowEventInfo from "../../components/events/showEventInfo";
 import DeletePopup from "../../components/deletePopUp";
 
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
 export default function AdminEventDetails() {
 
     const [event, setEvent] = useState({});
@@ -27,7 +28,7 @@ export default function AdminEventDetails() {
             }
 
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/events/${eventId}`,
+                `${BASE_URL}/events/${eventId}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -67,7 +68,7 @@ export default function AdminEventDetails() {
                 navigate("/login", { replace: true });
                 return;
             }
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/events/${eventId}`, {
+            const response = await fetch(`${BASE_URL}/events/${eventId}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

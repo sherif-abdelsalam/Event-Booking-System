@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import Loader from "../components/loader";
 import EventCard from "../components/home/eventCard";
 
+
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
+
 export default function CategoryEvents() {
     const { categoryId } = useParams(); // Get the categoryId from the URL parameters
     const navigate = useNavigate(); // Initialize the navigate function
@@ -18,7 +21,7 @@ export default function CategoryEvents() {
             }
 
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/categories/${categoryId}/events`,
+                `${BASE_URL}/categories/${categoryId}/events`,
                 {
                     headers: {
                         "Content-Type": "application/json",

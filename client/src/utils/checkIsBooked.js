@@ -1,5 +1,8 @@
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
+
+
 export const checkIsBooked = async (token, eventId) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/bookings`, {
+    const response = await fetch(`${BASE_URL}/bookings`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

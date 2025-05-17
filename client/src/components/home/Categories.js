@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../loader";
 
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1"
+
 export default function Categories() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ export default function Categories() {
             }
 
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/categories`,
+                `${BASE_URL}/categories`,
                 {
                     method: "GET",
                     headers: {

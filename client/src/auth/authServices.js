@@ -1,6 +1,7 @@
-const BASE_URL = process.env.REACT_APP_API_URL;
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
 
 export const login = async (userData) => {
+
 
     const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
@@ -14,6 +15,8 @@ export const login = async (userData) => {
 };
 
 export const register = async (userData) => {
+
+    console.log(BASE_URL);
     const response = await fetch(`${BASE_URL}/auth/signup`, {
         method: "POST",
         headers: {

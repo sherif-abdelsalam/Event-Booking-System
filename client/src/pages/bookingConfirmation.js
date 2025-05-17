@@ -2,11 +2,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Check, Star } from "lucide-react";
+import { Check } from "lucide-react";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
 import Loader from "../components/loader";
 
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
 const BookingConfirmation = () => {
     const { eventId } = useParams();
     const [eventDetails, setEvent] = useState(null);
@@ -20,7 +21,7 @@ const BookingConfirmation = () => {
                 navigate("/login", { replace: true });
                 return;
             }
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/events/${eventId}`, {
+            const response = await fetch(`${BASE_URL}/events/${eventId}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

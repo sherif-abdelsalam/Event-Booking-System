@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL + "/api/v1";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {

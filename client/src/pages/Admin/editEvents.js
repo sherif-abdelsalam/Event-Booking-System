@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import CreateOrEditEvent from "./createOrEditEvent.js";
 
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
+
 export default function EditEvents() {
     const { eventId } = useParams();
     const [loading, setLoading] = useState(true);
@@ -18,7 +20,7 @@ export default function EditEvents() {
                 return;
             }
             setLoading(true);
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/events/${eventId}`, {
+            const response = await fetch(`${BASE_URL}/events/${eventId}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

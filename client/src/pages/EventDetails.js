@@ -9,6 +9,8 @@ import ImagePreview from "../components/events/imagePreview";
 import ShowEventInfo from "../components/events/showEventInfo";
 const { toast, ToastContainer } = require("react-toastify");
 
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
+
 export default function EventDetails() {
     const { eventId } = useParams();
     const [eventDetails, setEventDetails] = useState({});
@@ -22,7 +24,7 @@ export default function EventDetails() {
                 navigate("/login", { replace: true });
                 return;
             }
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/events/${eventId}`, {
+            const response = await fetch(`${BASE_URL}/events/${eventId}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -71,7 +73,7 @@ export default function EventDetails() {
         }
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/bookings/${eventDetails.bookingId}`, {
+            const response = await fetch(`${BASE_URL}/bookings/${eventDetails.bookingId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
