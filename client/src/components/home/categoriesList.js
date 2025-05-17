@@ -4,7 +4,7 @@ import Loader from "../loader";
 
 const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1"
 
-export default function Categories() {
+export default function CategoriesList() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
