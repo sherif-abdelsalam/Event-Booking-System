@@ -77,7 +77,20 @@ server/
    ```bash
    npm install
    ```
-3. Set up your environment variables in a `.env` file (see below).
+3. Set up your environment variables in a `.env` file.
+
+   ```
+   PORT=5000
+   DATABASE=<your-mongodb-connection-string>
+   DATABASE_PASSWORD=<your-db-password>
+   JWT_SECRET=<your-jwt-secret>
+   JWT_EXPIRES_IN=<expiration>
+   EMAIL_USER=<your-email>
+   EMAIL_PASS=<your-email-password>
+   CLOUDINARY_CLOUD_NAME=<cloudinary-name>
+   CLOUDINARY_API_KEY=<cloudinary-key>
+   CLOUDINARY_API_SECRET=<cloudinary-secret>
+   ```
 
 ### Running the Server
 
