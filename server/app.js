@@ -54,7 +54,17 @@ app.use(
     })
 );
 
-app.use(express.static(`${__dirname}/public`));
+
+
+// app.use(express.static(`${__dirname}/public`));
+
+app.get("/", (req, res) => {
+    res.status(200).json({
+        status: "success",
+        message: "Welcome to Eventy API",
+    });
+});
+
 
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/auth", authRouter);
