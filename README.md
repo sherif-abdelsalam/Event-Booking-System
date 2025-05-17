@@ -4,7 +4,8 @@ EventBooking is a full-stack web application for discovering, booking, and manag
 
 ### Project Demo
 
-[EventBooking](https://youtu.be/DRdLfArFmeo)
+[![Uploading image.png…]()
+](https://youtu.be/DRdLfArFmeo)
 
 ## Features
 
