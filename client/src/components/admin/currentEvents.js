@@ -7,6 +7,7 @@ import Loader from '../loader';
 import SearchAndAddEventBar from './searchAndAddEvent';
 import Pagination from './pagination';
 import ActionDropdown from './actionDropDown';
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
 
 function CurrentEvents() {
     const [events, setEvents] = useState([]);
@@ -33,7 +34,7 @@ function CurrentEvents() {
             }
 
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/events?page=${page}&limit=${eventsPerPage}`,
+                `${BASE_URL}/events?page=${page}&limit=${eventsPerPage}`,
                 {
                     method: "GET",
                     headers: {

@@ -3,7 +3,7 @@ import DeletePopup from "../deletePopUp";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
+const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
 export default function ActionDropdown({ eventId }) {
 
     const [showDelete, setShowDelete] = useState(false);
@@ -21,7 +21,7 @@ export default function ActionDropdown({ eventId }) {
             }
 
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/events/${eventId}`,
+                `${BASE_URL}/events/${eventId}`,
                 {
                     method: "DELETE",
                     headers: {
