@@ -12,7 +12,7 @@ EventBooking is a full-stack web application for discovering, booking, and manag
 
 - Full-stack event booking platform
 - RESTful API with JWT authentication and role-based access control
-  Modern, responsive UI with reusable components
+  Modern UI with reusable components
 - Admin dashboard for managing users, events, categories, and bookings
 
 ### Frontend
