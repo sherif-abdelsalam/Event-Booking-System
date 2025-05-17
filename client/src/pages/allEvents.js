@@ -6,7 +6,7 @@ export default function AllEvents() {
         <>
             <Navbar />
             <div className="mt-16">
-                <GetEvents />
+                <GetEvents isViewAll={true} />
             </div>
         </>
     );

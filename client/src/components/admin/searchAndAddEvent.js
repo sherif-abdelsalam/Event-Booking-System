@@ -1,6 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { Search, Plus } from "lucide-react";
-function SearchAndAddEventBar({ setSearchValue }) {
+import { useEffect, useState } from "react";
+function SearchAndAddEventBar({ events, setEvents, isAdminPage = false }) {
+    const [searchValue, setSearchValue] = useState("");
+
+    useEffect(() => {
+        setEvents(events.filter((event) => event.name.toLowerCase().includes(searchValue.toLowerCase())));
+    }, [searchValue]);
+
     const navigate = useNavigate();
     return (
         <div className="flex justify-between items-center mb-3">
@@ -8,15 +15,15 @@ function SearchAndAddEventBar({ setSearchValue }) {
                 <Search />
                 <input
                     type="text"
-                    placeholder="Search for Products"
+                    placeholder="Search for events"
                     className="w-full p-[10px] border-none text-[16px] font-normal leading-6 text-text-dark focus:outline-none"
                     onChange={(e) => setSearchValue(e.target.value)}
                 />
             </div>
-            <button className="bg-accent text-primary border-none p-3 rounded-lg cursor-pointer text-base font-semibold leading-[19.36px] h-[44px] flex gap-2 items-center" onClick={() => navigate("/admin/events/create-event")}>
+            {isAdminPage && <button className="bg-accent text-primary border-none p-3 rounded-lg cursor-pointer text-base font-semibold leading-[19.36px] h-[44px] flex gap-2 items-center" onClick={() => navigate("/admin/events/create-event")}>
                 <Plus />
                 Add Event
-            </button>
+            </button>}
         </div>
     )
 }

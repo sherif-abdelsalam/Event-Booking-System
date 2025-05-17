@@ -28,7 +28,6 @@ const EventCard = (event) => {
     } = event;
 
     const eventDate = new Date(date);
-    console.log("Event Date:", date);
     const month = format(eventDate, "MMM").toUpperCase();
     const day = format(eventDate, "d");
     const navigate = useNavigate();

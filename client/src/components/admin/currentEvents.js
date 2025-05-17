@@ -5,6 +5,8 @@ import { format } from 'date-fns';
 import ActionImage from "../../assets/more-circle.svg";
 import Loader from '../loader';
 import SearchAndAddEventBar from './searchAndAddEvent';
+import Pagination from './pagination';
+import ActionDropdown from './actionDropDown';
 
 function CurrentEvents() {
     const [events, setEvents] = useState([]);
@@ -12,7 +14,6 @@ function CurrentEvents() {
     const [currentPage, setCurrentPage] = useState(1);
     const [eventsPerPage] = useState(5);
     const [totalEvents, setTotalEvents] = useState(0);
-    const [searchValue, setSearchValue] = useState('');
 
     const navigate = useNavigate();
     const eventTableHeader = ["Photo", "Event Name", "Category", "Date", "Venue", "Price", "Action"];
@@ -68,9 +69,6 @@ function CurrentEvents() {
         }
     };
 
-    const filteredEvents = events.filter((event) =>
-        event.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
 
     const startPage = Math.max(1, currentPage - 1);
     const endPage = Math.min(totalPages, startPage + 2);
@@ -80,12 +78,17 @@ function CurrentEvents() {
         pageNumbers.push(i);
     }
 
+    const handleActionDropdown = (event, eventId) => {
+        event.stopPropagation();
+        toggleDropdown(eventId);
+    };
+
 
     if (loading) return <Loader />;
 
     return (
         <>
-            <SearchAndAddEventBar setSearchValue={setSearchValue} />
+            <SearchAndAddEventBar events={events} setEvents={setEvents} isAdminPage={true} />
 
             <table className='w-full'>
                 <thead>
@@ -98,15 +101,15 @@ function CurrentEvents() {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredEvents.length === 0 && (
+                    {events.length === 0 && (
                         <tr>
                             <Td colspan="7">No events found!</Td>
                         </tr>
                     )}
-                    {filteredEvents.map((event, index) => (
+                    {events.map((event, index) => (
                         <tr key={index}
                             className="bg-white border-b-2 border-b-[#EBE5FF]"
-                            onClick={() => navigate(`/events/${event._id}`)}
+                            onClick={() => navigate(`/admin/events/${event._id}`)}
                         >
                             <Td>
                                 <div className="flex items-center justify-center">
@@ -124,11 +127,13 @@ function CurrentEvents() {
                                         src={ActionImage}
                                         alt="Action"
                                         onClick={(e) => {
-                                            e.stopPropagation();
-                                            toggleDropdown(index);
+                                            handleActionDropdown(e, event._id);
                                         }}
                                         className="cursor-pointer"
                                     />
+                                    {dropdownOpen === event._id && (
+                                        <ActionDropdown eventId={event._id} />
+                                    )}
                                 </div>
                             </Td>
                         </tr>
@@ -138,37 +143,14 @@ function CurrentEvents() {
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2 mt-4">
-                    <button
-                        onClick={() => goToPage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"
-                    >
-                        Previous
-                    </button>
-
-                    {pageNumbers.map((page) => (
-                        <button
-                            key={page}
-                            onClick={() => goToPage(page)}
-                            className={`px-3 py-1 rounded ${currentPage === page
-                                ? "bg-purple-600 text-white"
-                                : "bg-gray-200 hover:bg-gray-300"
-                                }`}
-                        >
-                            {page}
-                        </button>
-                    ))}
-
-                    <button
-                        onClick={() => goToPage(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"
-                    >
-                        Next
-                    </button>
-                </div>
-            )}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    goToPage={goToPage}
+                    pageNumbers={pageNumbers}
+                />
+            )
+            }
         </>
     );
 }
@@ -182,3 +164,5 @@ const Td = ({ children, statusStyle, colspan }) => (
         {children}
     </td>
 );
+
+

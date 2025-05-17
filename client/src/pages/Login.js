@@ -44,9 +44,6 @@ export default function Login() {
         },
     });
 
-    // if (isAuthenticated) {
-    //   return navigate("/");
-    // }
     return (
         <SplitScreen sign={SIGN_IN}>
             <div className="w-full h-full flex justify-center items-center px-24">

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 const AuthContext = createContext();
 
@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [loading, setLoading] = useState(true);
 
+    const location = useLocation();
+
 
 
     // New: Fetch user data from backend when token changes
@@ -19,9 +21,11 @@ export const AuthProvider = ({ children }) => {
                 try {
                     const userData = await fetchCurrentUser(token);
                     setUser(userData.data.user);
-                    console.log("User data fetched:", userData.data.user);
                     localStorage.setItem("token", token);
                     localStorage.setItem("user", JSON.stringify(userData.data.user));
+                    if (location.pathname === "/login" || location.pathname === "/" || location.pathname === "/register") {
+                        navigate("/home");
+                    }
                 } catch (error) {
                     console.error("Failed to fetch user", error);
                     logout();
