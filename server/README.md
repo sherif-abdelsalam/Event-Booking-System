@@ -2,6 +2,10 @@
 
 This is the backend API for the EventBooking application, built with Node.js, Express, and MongoDB. It provides RESTful endpoints for user authentication, event management, booking, and category management, with robust security and validation features.
 
+## Deployment
+
+The backend is deployed on Vercel and can be accessed at [Backend Railway Deployment](https://event-bookig-server-production.up.railway.app/).
+
 ## Features
 
 ### Authentication & Authorization
@@ -9,14 +13,12 @@ This is the backend API for the EventBooking application, built with Node.js, Ex
 - JWT-based authentication
 - Role-based access control (admin, user)
 - Secure password hashing with bcryptjs
-- Email verification and password reset (via nodemailer)
 
 ### Event Management
 
 - CRUD operations for events (admin only for create, update, delete)
 - Event image upload (using multer and cloudinary)
 - Event categories management
-- Slug generation for event URLs
 
 ### Booking System
 
@@ -28,8 +30,6 @@ This is the backend API for the EventBooking application, built with Node.js, Ex
 ### User Management
 
 - User registration and login
-- Profile management
-- Admin can manage users
 
 ### Security & Best Practices
 
@@ -79,23 +79,6 @@ server/
    ```
 3. Set up your environment variables in a `.env` file (see below).
 
-### Environment Variables
-
-Create a `.env` file in the `server` directory with the following:
-
-```
-PORT=5000
-DATABASE=<your-mongodb-connection-string>
-DATABASE_PASSWORD=<your-db-password>
-JWT_SECRET=<your-jwt-secret>
-JWT_EXPIRES_IN=90d
-EMAIL_USER=<your-email>
-EMAIL_PASS=<your-email-password>
-CLOUDINARY_CLOUD_NAME=<cloudinary-name>
-CLOUDINARY_API_KEY=<cloudinary-key>
-CLOUDINARY_API_SECRET=<cloudinary-secret>
-```
-
 ### Running the Server
 
 Start the development server with nodemon:
@@ -114,6 +97,10 @@ node dev-data/seed_evets.js
 ```
 
 ### API Endpoints
+
+### Postman Documentation
+
+[Event Booking Postman API Documentation](https://www.postman.com/research-saganist-75349510/hodhod/folder/6wu7ttk/)
 
 - Auth Endpoints (`/api/v1/auth`)
 
