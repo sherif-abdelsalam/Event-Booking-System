@@ -25,12 +25,12 @@ if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }
 
-// app.use(
-//     cors({
-//         origin: "*",
-//         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-//     })
-// ); // use CORS middleware
+app.use(
+    cors({
+        origin: "*",
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    })
+); // use CORS middleware
 
 app.use(express.json({ limit: "10kb" }));
 
@@ -53,17 +53,6 @@ app.use(
         message: "Too many requests from this IP, please try again in an hour!",
     })
 );
-
-
-
-// app.use(express.static(`${__dirname}/public`));
-
-app.get("/", (req, res) => {
-    res.status(200).json({
-        status: "success",
-        message: "Welcome to Eventy API",
-    });
-});
 
 
 app.use("/api/v1/users", usersRouter);
