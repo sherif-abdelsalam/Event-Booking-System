@@ -4,7 +4,7 @@ This is the backend API for the EventBooking application, built with Node.js, Ex
 
 ## Deployment
 
-The backend is deployed on Vercel and can be accessed at [Backend Railway Deployment](https://event-bookig-server-production.up.railway.app/).
+The backend is deployed on Railway and can be accessed at [Backend Railway Deployment](https://event-bookig-server-production.up.railway.app/).
 
 ## Features
 
