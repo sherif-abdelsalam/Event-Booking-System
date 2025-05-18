@@ -10,8 +10,8 @@ EventBooking is a full-stack web application for discovering, booking, and manag
 
 
 ### Admin User Credentials
-- admin@gmail.com
-- admin@io
+- email : admin@gmail.com
+- password : admin@io
 
 ## Features
 
