@@ -1,15 +1,25 @@
 import InputButton from "../components/auth/inputButton";
 import SplitScreen from "../components/auth/splitScreen";
 import { SIGN_UP } from "../constants/authConstants";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { registerSchema } from "../validations/userValidation";
 import { useFormik } from "formik";
-import { register } from "../auth/authServices";
-import { useState } from "react";
+import { register as authServiceRegister } from "../auth/authServices";
+import { useAuth } from "../auth/authContext";
+import { useState, useEffect } from "react";
 
 export default function Register() {
-  const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { login, isAuthenticated } = useAuth();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated()) {
+      // User is already logged in, don't show register form
+      return;
+    }
+  }, [isAuthenticated]);
 
   const formik = useFormik({
     initialValues: {
@@ -29,17 +39,23 @@ export default function Register() {
       };
 
       try {
-        const response = await register(newUser);
+        setIsLoading(true);
+        setError(null);
+
+        // Call the auth service to get the response
+        const response = await authServiceRegister(newUser);
+
         if (response.status === "success") {
-          localStorage.setItem("token", response.token);
-          navigate("/");
-        }
-        if (response.status === "error") {
+          // Use the auth context login function to update the context
+          await login(response.token, response.data.user);
+        } else if (response.status === "error") {
           throw new Error(response.message);
         }
       } catch (error) {
         setError(error.message);
         console.error("Registration error:", error);
+      } finally {
+        setIsLoading(false);
       }
     },
   });
@@ -121,9 +137,10 @@ export default function Register() {
 
             <button
               type="submit"
-              className="bg-primary text-white font-bold p-3 rounded-md w-full text-[18px] hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 mb-2"
+              disabled={isLoading}
+              className="bg-primary text-white font-bold p-3 rounded-md w-full text-[18px] hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {formik.isSubmitting ? (
+              {isLoading ? (
                 <div className="flex items-center justify-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
                   <span className="ml-2">Creating account...</span>

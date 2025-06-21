@@ -30,7 +30,7 @@ router.use(
 // Event routes
 router
   .route("/")
-  .get(optionalAuth, getEvents) // Allow public access with optional auth for booking status
+  .get(optionalAuth, getEvents)
   .post(protect, restrictTo("admin"), upload.single("image"), createEvent);
 router
   .route("/:id")

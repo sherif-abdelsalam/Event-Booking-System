@@ -9,9 +9,10 @@ const Navbar = () => {
   const inactiveLinkClass =
     "text-white hover:text-secondary transition-colors text-[20px]";
 
-  const { isAuthenticated, isAdmin, loading, logout, user } = useAuth();
+  const { isAuthenticated, isAdmin, loading, logout, user, isInitialized } =
+    useAuth();
 
-  if (loading) {
+  if (loading || !isInitialized) {
     return <Loader />;
   }
 

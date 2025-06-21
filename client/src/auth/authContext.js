@@ -61,21 +61,32 @@ export const AuthProvider = ({ children }) => {
   const login = useCallback(
     async (receivedToken, userData) => {
       try {
+        setLoading(true);
         setToken(receivedToken);
         setUser(userData);
         localStorage.setItem("token", receivedToken);
         localStorage.setItem("user", JSON.stringify(userData));
+
+        // Small delay to ensure state is updated
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // Navigate to home after successful login
+        navigate("/");
       } catch (error) {
         console.error("Login error:", error);
         clearAuth();
+      } finally {
+        setLoading(false);
       }
     },
-    [clearAuth]
+    [clearAuth, navigate]
   );
 
   // Initialize authentication on app start
   useEffect(() => {
     const initializeAuth = async () => {
+      setLoading(true);
+
       if (token) {
         try {
           const userData = await fetchCurrentUser(token);
