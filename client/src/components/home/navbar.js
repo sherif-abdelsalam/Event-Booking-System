@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import Loader from "../loader";
 import { useAuth } from "../../auth/authContext";
 import NavbarBackground from "../navabarBackground";
+import ThemeToggle from "../themeToggle";
 
 const Navbar = () => {
   const activeLinkClass =
@@ -9,7 +10,7 @@ const Navbar = () => {
   const inactiveLinkClass =
     "text-white hover:text-secondary transition-colors text-[20px]";
 
-  const { isAuthenticated, isAdmin, loading, logout, user, isInitialized } =
+  const { isAuthenticated, isAdmin, loading, logout, isInitialized } =
     useAuth();
 
   if (loading || !isInitialized) {
@@ -35,21 +36,32 @@ const Navbar = () => {
         >
           Events
         </NavLink>
+        {isAuthenticated() && (
+          <NavLink
+            to="/my-bookings"
+            className={({ isActive }) =>
+              isActive ? activeLinkClass : inactiveLinkClass
+            }
+          >
+            My Bookings
+          </NavLink>
+        )}
       </div>
 
       <div className="flex items-center gap-4">
+        <ThemeToggle />
         {isAuthenticated() ? (
           <>
             {isAdmin() && (
               <Link to="/admin">
-                <button className="bg-secondary text-primary font-semibold px-4 py-2 rounded-md hover:bg-accent transition-colors">
+                <button className="bg-secondary text-primary font-semibold px-4 py-2 rounded-md hover:bg-accent transition-colors dark:bg-secondary dark:text-primary">
                   Admin
                 </button>
               </Link>
             )}
             <button
               onClick={logout}
-              className="bg-red-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+              className="bg-red-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-red-700 transition-colors dark:bg-red-600 dark:hover:bg-red-700"
             >
               Logout
             </button>
@@ -57,12 +69,12 @@ const Navbar = () => {
         ) : (
           <>
             <Link to="/login">
-              <button className="bg-secondary text-primary font-semibold px-4 py-2 rounded-md hover:bg-accent transition-colors">
+              <button className="bg-secondary text-primary font-semibold px-4 py-2 rounded-md hover:bg-accent transition-colors dark:bg-secondary dark:text-primary">
                 Login
               </button>
             </Link>
             <Link to="/register">
-              <button className="border border-secondary text-secondary font-semibold px-4 py-2 rounded-md hover:bg-secondary hover:text-primary transition-colors">
+              <button className="border border-secondary text-secondary font-semibold px-4 py-2 rounded-md hover:bg-secondary hover:text-primary transition-colors dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-primary">
                 Register
               </button>
             </Link>

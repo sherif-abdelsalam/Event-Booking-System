@@ -48,8 +48,10 @@ export default function CategoriesList() {
   }
   return (
     <div className="flex flex-col mx-40 gap-4 mb-24">
-      <p className="font-bold text-xl text-primary">Explore Categories</p>
-      <div className="flex flex-wrap justify-center items-center ">
+      <p className="font-bold text-xl text-primary dark:text-secondary">
+        Explore Categories
+      </p>
+      <div className="flex flex-wrap justify-center items-center">
         {categories.map((category) => (
           <Link
             to={`/categories/${category._id}`}
@@ -59,9 +61,11 @@ export default function CategoriesList() {
             <img
               src={category.image}
               alt={category.name}
-              className="w-32 h-32 rounded-full shadow-md  m-4 flex items-center justify-center text-center text-xl font-bold text-primary"
+              className="w-32 h-32 rounded-full border-2 border-white dark:border-2 shadow-md m-4 flex items-center justify-center text-center text-xl font-bold text-primary"
             />
-            <div className="font-semibold">{category.name}</div>
+            <div className="font-semibold dark:text-white">
+              {category?.name[0].toUpperCase() + category?.name.slice(1)}
+            </div>
           </Link>
         ))}
       </div>

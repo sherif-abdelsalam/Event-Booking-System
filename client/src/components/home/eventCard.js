@@ -52,7 +52,7 @@ const EventCard = (event) => {
     navigate(`/booking-confirmation/${eventId}`);
   };
   return (
-    <div className="w-full max-w-md overflow-hidden rounded-lg border shadow-md bg-white flex flex-col hover:transform hover:scale-105 transition-transform duration-300">
+    <div className=" overflow-hidden rounded border border-gray-200 dark:border-gray-700 shadow-md bg-white dark:bg-gray-800 flex flex-col hover:transform hover:scale-105 transition-transform duration-300">
       <div onClick={() => navigate(`/events/${eventId}`)}>
         <div className="relative">
           <img
@@ -72,15 +72,21 @@ const EventCard = (event) => {
         <div className="p-4 flex">
           {/* Date indicator */}
           <div className="flex flex-col items-center justify-center mr-4 w-16">
-            <div className="text-purple-700 font-bold text-lg">{month}</div>
-            <div className="text-gray-800 font-bold text-2xl">{day}</div>
+            <div className="text-purple-700 dark:text-purple-400 font-bold text-lg">
+              {month}
+            </div>
+            <div className="text-gray-800 dark:text-white font-bold text-2xl">
+              {day}
+            </div>
           </div>
 
           {/* Event details */}
 
           <div>
-            <h2 className="text-lg font-bold text-gray-800 mb-1">{name}</h2>
-            <p className="text-gray-600 text-sm mb-2">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-1">
+              {name}
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">
               {description.length > 60
                 ? `${description.substring(0, 60)}...`
                 : description}
@@ -123,7 +129,7 @@ const EventCard = (event) => {
               e.stopPropagation();
               bookEvent();
             }}
-            className="bg-green-600 text-white font-semibold text-center text-md p-3 hover:bg-green-700 cursor-pointer transition-colors"
+            className="bg-green-600 dark:bg-green-700 text-white font-semibold text-center text-md p-3 hover:bg-green-700 dark:hover:bg-green-600 cursor-pointer transition-colors"
           >
             Book Now
           </div>

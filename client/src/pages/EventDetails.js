@@ -8,6 +8,7 @@ import GoBack from "../components/events/goBack";
 import ImagePreview from "../components/events/imagePreview";
 import ShowEventInfo from "../components/events/showEventInfo";
 import { useAuth } from "../auth/authContext";
+import Footer from "../components/footer";
 const { toast, ToastContainer } = require("react-toastify");
 
 const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
@@ -112,15 +113,18 @@ export default function EventDetails() {
 
   if (!eventDetails) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white dark:bg-gray-900">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
             Event Not Found
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
             The event you're looking for doesn't exist or has been removed.
           </p>
-          <button onClick={() => navigate("/events")}>
+          <button
+            onClick={() => navigate("/events")}
+            className="flex items-center text-primary dark:text-secondary hover:text-primaryHover dark:hover:text-accent"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Events
           </button>
@@ -130,9 +134,9 @@ export default function EventDetails() {
   }
 
   return (
-    <>
+    <div className="dark:bg-gray-900">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+      <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <GoBack />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -148,24 +152,24 @@ export default function EventDetails() {
 
             {!isAuthenticated() ? (
               <div className="flex flex-col gap-2">
-                <p className="bg-blue-50 border border-blue-200 p-3 text-center text-blue-700 font-medium rounded-md">
+                <p className="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 p-3 text-center text-blue-700 dark:text-blue-200 font-medium rounded-md">
                   Please login to book this event
                 </p>
                 <button
                   onClick={() => navigate("/login")}
-                  className="bg-blue-600 hover:bg-blue-700 p-3 text-center text-white font-semibold rounded-md transition-colors"
+                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 p-3 text-center text-white font-semibold rounded-md transition-colors"
                 >
                   Login to Book
                 </button>
               </div>
             ) : eventDetails.isBooked ? (
               <div className="flex flex-col gap-2">
-                <p className="bg-red-700 p-3 text-center text-white font-semibold rounded-md">
+                <p className="bg-red-700 dark:bg-red-800 p-3 text-center text-white font-semibold rounded-md">
                   You have already booked this event.
                 </p>
                 <button
                   onClick={() => handleCancelBooking(eventDetails.eventId)}
-                  className="bg-gray-200 hover:bg-gray-300 p-3 text-center text-gray-700 font-semibold rounded-md transition-colors"
+                  className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 p-3 text-center text-gray-700 dark:text-gray-200 font-semibold rounded-md transition-colors"
                 >
                   Cancel Booking
                 </button>
@@ -173,7 +177,7 @@ export default function EventDetails() {
             ) : (
               <button
                 onClick={() => handleBookEvent(eventDetails.eventId)}
-                className="bg-green-700 hover:bg-green-800 p-3 text-center text-white font-semibold rounded-md transition-colors"
+                className="bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 p-3 text-center text-white font-semibold rounded-md transition-colors"
               >
                 Book Now
               </button>
@@ -181,7 +185,8 @@ export default function EventDetails() {
           </div>
         </div>
       </div>
+      <Footer />
       <ToastContainer />
-    </>
+    </div>
   );
 }

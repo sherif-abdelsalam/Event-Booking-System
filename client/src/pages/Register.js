@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { register as authServiceRegister } from "../auth/authServices";
 import { useAuth } from "../auth/authContext";
 import { useState, useEffect } from "react";
+import Footer from "../components/footer";
 
 export default function Register() {
   const [error, setError] = useState(null);
@@ -64,7 +65,7 @@ export default function Register() {
     <SplitScreen sign={SIGN_UP}>
       <div className="w-full h-full flex justify-center items-center px-24">
         <div className="w-4/5">
-          <h1 className="font-bold text-[32px] text-textPrimary mb-8">
+          <h1 className="font-bold text-[32px] text-textPrimary dark:text-white mb-8">
             Create an account
           </h1>
 
@@ -126,10 +127,12 @@ export default function Register() {
               }
             />
 
-            {error && <p className="mb-4 text-red-600">{error}</p>}
+            {error && (
+              <p className="mb-4 text-red-600 dark:text-red-400">{error}</p>
+            )}
 
             <div className="flex flex-row gap-2 mb-2 mt-12">
-              <p className="text-textGray text-[14px] font-openSans">
+              <p className="text-textGray dark:text-gray-300 text-[14px] font-openSans">
                 By signing in, you agree to our Terms of Service and Privacy
                 Policy
               </p>
@@ -138,7 +141,7 @@ export default function Register() {
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-primary text-white font-bold p-3 rounded-md w-full text-[18px] hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-primary dark:bg-secondary text-white dark:text-primary font-bold p-3 rounded-md w-full text-[18px] hover:bg-primaryHover dark:hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:ring-opacity-50 mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">
@@ -151,12 +154,12 @@ export default function Register() {
             </button>
 
             <div className="flex flex-row gap-2 mb-8">
-              <p className="text-textGray text-[14px] font-openSans">
+              <p className="text-textGray dark:text-gray-300 text-[14px] font-openSans">
                 Already have an account?
               </p>
               <Link
                 to="/login"
-                className="text-primary text-[16px] font-openSans hover:text-primaryHover"
+                className="text-primary dark:text-secondary text-[16px] font-openSans hover:text-primaryHover dark:hover:text-accent"
               >
                 Sign in
               </Link>

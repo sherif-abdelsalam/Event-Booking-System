@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const Booking = require("../models/bookingModel");
 const AppErrors = require("../utils/appErrors");
 const catchAsync = require("../utils/catchAsync");
 

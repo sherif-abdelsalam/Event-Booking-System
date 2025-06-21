@@ -9,8 +9,8 @@ router.delete("/deleteMe", authMiddleware.protect, userController.deleteMe);
 router.get("/me", authMiddleware.protect, userController.getMe);
 
 router
-    .route("/:id")
-    .patch(userController.updateUser)
-    .delete(userController.deleteUser);
+  .route("/:id")
+  .patch(userController.updateUser)
+  .delete(userController.deleteUser);
 
 module.exports = router;

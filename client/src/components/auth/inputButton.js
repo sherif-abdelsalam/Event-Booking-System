@@ -21,10 +21,9 @@ export default function InputButton({
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
   return (
     <div className="mb-6 relative">
-      <label className="block text-textGray text-[16px] font-openSans">
+      <label className="block text-textGray dark:text-gray-300 text-[16px] font-openSans">
         {title}
       </label>
       <div className="relative">
@@ -34,8 +33,10 @@ export default function InputButton({
           onChange={onChange}
           onBlur={onBlur}
           value={value}
-          className={`border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:border-transparent ${
-            error ? " border-2 border-red-600" : "focus:ring-primary"
+          className={`border border-gray-300 dark:border-gray-600 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
+            error
+              ? " border-2 border-red-600 dark:border-red-500"
+              : "focus:ring-primary dark:focus:ring-secondary"
           } ${isPasswordField ? "pr-12" : ""}`}
           placeholder={placeholder}
         />
@@ -43,7 +44,7 @@ export default function InputButton({
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 focus:outline-none"
           >
             {showPassword ? (
               <svg
@@ -83,9 +84,9 @@ export default function InputButton({
             )}
           </button>
         )}
-      </div>
+      </div>{" "}
       {error && (
-        <p className="absolute bottom-[-20px] text-red-600 text-[14px]">
+        <p className="absolute bottom-[-20px] text-red-600 dark:text-red-400 text-[14px]">
           {error}
         </p>
       )}

@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import RoleRoute from "./auth/roleRoute";
 import Home from "./pages/Home";
 import { AuthProvider, useAuth } from "./auth/authContext";
+import { ThemeProvider } from "./contexts/themeContext";
 import ProtectedRoute from "./auth/protectRoute";
 import CategoryEvents from "./pages/CategoryEvents";
 import EventDetails from "./pages/EventDetails";
@@ -14,6 +15,7 @@ import NotFound from "./pages/notFound";
 import CreateEvents from "./pages/Admin/createOrEditEvent";
 import EditEvents from "./pages/Admin/editEvents";
 import AdminEventDetails from "./pages/Admin/adminEventDetails";
+import MyBookings from "./pages/MyBookings";
 import Loader from "./components/loader";
 import ErrorBoundary from "./components/ErrorBoundary";
 
@@ -38,6 +40,7 @@ function AppContent() {
 
       {/* Protected Routes - Require authentication */}
       <Route element={<ProtectedRoute />}>
+        <Route path="/my-bookings" element={<MyBookings />} />
         <Route
           path="/booking-confirmation/:eventId"
           element={<BookingConfirmation />}
@@ -65,11 +68,13 @@ function AppContent() {
 export default function App() {
   return (
     <ErrorBoundary>
-      <Router>
-        <AuthProvider>
-          <AppContent />
-        </AuthProvider>
-      </Router>
+      <ThemeProvider>
+        <Router>
+          <AuthProvider>
+            <AppContent />
+          </AuthProvider>
+        </Router>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

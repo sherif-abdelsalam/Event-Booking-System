@@ -4,6 +4,7 @@ import Loader from "../loader";
 import Pagination from "../admin/pagination";
 import SearchAndAddEventBar from "../admin/searchAndAddEvent";
 import { useAuth } from "../../auth/authContext";
+import { Link } from "react-router-dom";
 
 const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
 
@@ -103,7 +104,19 @@ export default function GetEvents({
 
   return (
     <div className="flex flex-col mx-40 gap-8 mb-24">
-      <p className="font-bold text-xl text-primary">Discover Events</p>
+      <div className="flex items-center justify-between mb-4">
+        <p className="font-bold text-xl text-primary dark:text-secondary">
+          Discover Events
+        </p>
+        {!isViewAll && (
+          <Link
+            to="/events"
+            className="bg-secondary text-primary font-semibold px-4 py-2 rounded-md hover:bg-accent transition-colors dark:bg-secondary dark:text-primary"
+          >
+            View All
+          </Link>
+        )}
+      </div>
 
       {showSearch && (
         <SearchAndAddEventBar
@@ -116,7 +129,9 @@ export default function GetEvents({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {!events && events.length === 0 ? (
-          <div className="font-semibold">No events available.</div>
+          <div className="font-semibold dark:text-white">
+            No events available.
+          </div>
         ) : (
           events.map((event) => (
             <EventCard

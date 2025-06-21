@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import Loader from "../components/loader";
 import EventCard from "../components/home/eventCard";
 import { useAuth } from "../auth/authContext";
+import Footer from "../components/footer";
 
 const BASE_URL = process.env.REACT_APP_API_URL + "/api/v1";
 
@@ -51,16 +52,16 @@ export default function CategoryEvents() {
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
-      <div className="flex flex-col mx-40 gap-8 mb-24">
+      <div className="flex-1 flex flex-col mx-40 gap-8 mb-24">
         {!categoryEvents || categoryEvents.length === 0 ? (
-          <p className="font-bold text-xl text-primary text-center mt-8">
+          <p className="font-bold text-xl text-primary dark:text-secondary text-center mt-8">
             No events found for this category.
           </p>
         ) : (
           <>
-            <p className="font-bold text-xl text-primary text-center mt-8">
+            <p className="font-bold text-xl text-primary dark:text-secondary text-center mt-8">
               Discover {categoryEvents[0].category.name} Events
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -82,6 +83,7 @@ export default function CategoryEvents() {
           </>
         )}
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }
