@@ -6,6 +6,7 @@ const helmet = require("helmet"); // security headers
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
+
 const cors = require("cors"); // enable CORS
 
 const usersRouter = require("./routers/userRouter");
@@ -30,7 +31,7 @@ app.use(
         origin: "*",
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     })
-); // use CORS middleware
+); 
 
 app.use(express.json({ limit: "10kb" }));
 
@@ -44,16 +45,15 @@ app.use(
     hpp()
 );
 
-// app.use(
-//     rateLimit({
-//         windowMs: 15 * 60 * 1000, // 15 minutes
-//         limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-//         standardHeaders: "draft-8", // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
-//         legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-//         message: "Too many requests from this IP, please try again in an hour!",
-//     })
-// );
-
+app.use(
+    rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+        standardHeaders: "draft-8", // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+        legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+        message: "Too many requests from this IP, please try again in an hour!",
+    })
+);
 
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/auth", authRouter);

@@ -8,121 +8,115 @@ import { login } from "../auth/authServices";
 import { useState } from "react";
 
 export default function Login() {
+  const [error, setError] = useState(null);
 
-    const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  // const { isAuthenticated, isAdmin } = useAuth();
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: async (values) => {
+      const user = {
+        email: values.email,
+        password: values.password,
+      };
 
-    const navigate = useNavigate();
-    // const { isAuthenticated, isAdmin } = useAuth();
-    const formik = useFormik({
-        initialValues: {
-            email: "",
-            password: "",
-        },
-        validationSchema: loginSchema,
-        onSubmit: async (values) => {
-            const user = {
-                email: values.email,
-                password: values.password,
-            };
+      try {
+        const response = await login(user);
+        if (response.status === "success") {
+          localStorage.setItem("token", response.token);
+          navigate("/");
+        }
 
-            try {
-                const response = await login(user);
-                if (response.status === "success") {
-                    localStorage.setItem("token", response.token);
-                    navigate("/home");
-                }
+        if (response.status === "fail") {
+          throw new Error(response.message);
+        }
+      } catch (error) {
+        setError(error.message);
+        console.error("Login error:", error);
+      }
+      // const response = await login(user);
+    },
+  });
 
-                if (response.status === "fail") {
-                    throw new Error(response.message);
-                }
-            } catch (error) {
-                setError(error.message);
-                console.error("Login error:", error);
+  return (
+    <SplitScreen sign={SIGN_IN}>
+      <div className="w-full h-full flex justify-center items-center px-24">
+        <div className="w-4/5">
+          <h1 className="font-bold text-[32px] text-textPrimary mb-8">Login</h1>
 
-            }
-            // const response = await login(user);
-        },
-    });
+          <form onSubmit={formik.handleSubmit}>
+            <InputButton
+              type="email"
+              value={formik.values.email}
+              title="Email"
+              placeholder="Enter your email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              name="email"
+              error={
+                formik.touched.email && formik.errors.email
+                  ? formik.errors.email
+                  : null
+              }
+            />
+            <InputButton
+              type="password"
+              value={formik.values.password}
+              title="Password"
+              placeholder="Enter your password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              name="password"
+              error={
+                formik.touched.password && formik.errors.password
+                  ? formik.errors.password
+                  : null
+              }
+            />
 
-    return (
-        <SplitScreen sign={SIGN_IN}>
-            <div className="w-full h-full flex justify-center items-center px-24">
-                <div className="w-4/5">
-                    <h1 className="font-bold text-[32px] text-textPrimary mb-8">Login</h1>
+            {error && <p className="text-red-600">{error}</p>}
 
-                    <form onSubmit={formik.handleSubmit}>
-                        <InputButton
-                            type="email"
-                            value={formik.values.email}
-                            title="Email"
-                            placeholder="Enter your email"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            name="email"
-                            error={
-                                formik.touched.email && formik.errors.email
-                                    ? formik.errors.email
-                                    : null
-                            }
-                        />
-                        <InputButton
-                            type="password"
-                            value={formik.values.password}
-                            title="Password"
-                            placeholder="Enter your password"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            name="password"
-                            error={
-                                formik.touched.password && formik.errors.password
-                                    ? formik.errors.password
-                                    : null
-                            }
-                        />
-
-
-                        {error && (
-                            <p className="text-red-600">{error}</p>
-                        )}
-
-                        <div className="flex flex-row justify-between mb-8">
-                            <a
-                                href="/forgot-password"
-                                className="text-textGray text-[16px] font-openSans hover:text-primary ml-auto"
-                            >
-                                Forgot password?
-                            </a>
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="bg-primary text-white font-bold p-3 rounded-md w-full text-[18px] hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 mb-2"
-                        >
-                            {formik.isSubmitting ? (
-                                <div className="flex items-center justify-center">
-                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-                                    <span className="ml-2">Logging in...</span>
-                                </div>
-                            ) : (
-                                "Login"
-                            )}
-                        </button>
-
-
-                        <div className="flex flex-row gap-2 mb-8">
-                            <p className="text-textGray text-[16px] font-openSans">
-                                Don't have an account?
-                            </p>
-                            <Link
-                                to="/register"
-                                className="text-primary text-[16px] font-openSans hover:text-primaryHover"
-                            >
-                                Sign Up
-                            </Link>
-                        </div>
-                    </form>
-                </div>
+            <div className="flex flex-row justify-between mb-8">
+              <a
+                href="/forgot-password"
+                className="text-textGray text-[16px] font-openSans hover:text-primary ml-auto"
+              >
+                Forgot password?
+              </a>
             </div>
-        </SplitScreen>
-    );
+
+            <button
+              type="submit"
+              className="bg-primary text-white font-bold p-3 rounded-md w-full text-[18px] hover:bg-primaryHover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 mb-2"
+            >
+              {formik.isSubmitting ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                  <span className="ml-2">Logging in...</span>
+                </div>
+              ) : (
+                "Login"
+              )}
+            </button>
+
+            <div className="flex flex-row gap-2 mb-8">
+              <p className="text-textGray text-[16px] font-openSans">
+                Don't have an account?
+              </p>
+              <Link
+                to="/register"
+                className="text-primary text-[16px] font-openSans hover:text-primaryHover"
+              >
+                Sign Up
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
+    </SplitScreen>
+  );
 }

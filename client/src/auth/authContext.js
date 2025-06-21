@@ -1,91 +1,153 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL + "/api/v1";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem("token"));
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [loading, setLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-    const location = useLocation();
+  // Memoized functions to prevent unnecessary re-renders
+  const isAuthenticated = useCallback(() => !!user, [user]);
+  const isAdmin = useCallback(() => user?.role === "admin", [user]);
 
+  // Clear auth data
+  const clearAuth = useCallback(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken(null);
+    setUser(null);
+  }, []);
 
+  // Logout function
+  const logout = useCallback(() => {
+    clearAuth();
+    navigate("/login");
+  }, [clearAuth, navigate]);
 
-    // New: Fetch user data from backend when token changes
-    useEffect(() => {
-        const initializeAuth = async () => {
-            if (token) {
-                try {
-                    const userData = await fetchCurrentUser(token);
-                    setUser(userData.data.user);
-                    localStorage.setItem("token", token);
-                    localStorage.setItem("user", JSON.stringify(userData.data.user));
-                    if (location.pathname === "/login" || location.pathname === "/" || location.pathname === "/register") {
-                        navigate("/home");
-                    }
-                } catch (error) {
-                    console.error("Failed to fetch user", error);
-                    logout();
-                }
-            } else {
-                localStorage.removeItem("token");
-                setUser(null);
-            }
-            setLoading(false);
-        };
+  // Fetch current user with better error handling
+  const fetchCurrentUser = useCallback(async (authToken) => {
+    try {
+      const response = await fetch(`${REACT_APP_API_URL}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
 
-        initializeAuth();
-    }, [token]);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user");
+      }
 
-    const login = async (receivedToken, userData) => {
-        setToken(receivedToken);
-        setUser(userData); // User data comes from backend login response
-    };
-
-    const logout = () => {
-        setToken(null);
-        setUser(null);
-    };
-
-    const isAuthenticated = () => !!user;
-
-    const isAdmin = () => {
-        if (user && user.role) {
-            return user.role === "admin";
-        }
-        return false;
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+      throw error;
     }
+  }, []);
 
-    return (
-        <AuthContext.Provider
-            value={{
-                user,
-                token,
-                login,
-                logout,
-                isAuthenticated,
-                isAdmin,
-                loading,
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
+  // Login function
+  const login = useCallback(
+    async (receivedToken, userData) => {
+      try {
+        setToken(receivedToken);
+        setUser(userData);
+        localStorage.setItem("token", receivedToken);
+        localStorage.setItem("user", JSON.stringify(userData));
+      } catch (error) {
+        console.error("Login error:", error);
+        clearAuth();
+      }
+    },
+    [clearAuth]
+  );
+
+  // Initialize authentication on app start
+  useEffect(() => {
+    const initializeAuth = async () => {
+      if (token) {
+        try {
+          const userData = await fetchCurrentUser(token);
+          setUser(userData.data.user);
+          localStorage.setItem("user", JSON.stringify(userData.data.user));
+
+          // Only redirect if user is on login or register pages
+          const authPages = ["/login", "/register"];
+          if (authPages.includes(location.pathname)) {
+            navigate("/");
+          }
+        } catch (error) {
+          console.error("Failed to initialize auth:", error);
+          clearAuth();
+        }
+      } else {
+        clearAuth();
+      }
+
+      setLoading(false);
+      setIsInitialized(true);
+    };
+
+    if (!isInitialized) {
+      initializeAuth();
+    }
+  }, [
+    token,
+    location.pathname,
+    navigate,
+    clearAuth,
+    fetchCurrentUser,
+    isInitialized,
+  ]);
+
+  // Token validation every 30 minutes for security
+  useEffect(() => {
+    if (!token || !user) return;
+
+    const validateToken = async () => {
+      try {
+        await fetchCurrentUser(token);
+      } catch (error) {
+        console.error("Token validation failed:", error);
+        logout();
+      }
+    };
+
+    const interval = setInterval(validateToken, 30 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [token, user, fetchCurrentUser, logout]);
+
+  const contextValue = {
+    user,
+    token,
+    login,
+    logout,
+    isAuthenticated,
+    isAdmin,
+    loading,
+    isInitialized,
+  };
+
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
 };
 
-// Helper function to fetch user data
-async function fetchCurrentUser(token) {
-    const response = await fetch(`${REACT_APP_API_URL}/users/me`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    if (!response.ok) throw new Error("Failed to fetch user");
-    return await response.json();
-}
-
-
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
+};
