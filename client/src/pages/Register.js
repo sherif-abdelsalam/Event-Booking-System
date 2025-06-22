@@ -48,7 +48,7 @@ export default function Register() {
 
         if (response.status === "success") {
           // Use the auth context login function to update the context
-          await login(response.token, response.data.user);
+          await login(response.token, response.user);
         } else if (response.status === "error") {
           throw new Error(response.message);
         }
